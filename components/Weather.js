@@ -4,14 +4,34 @@ import { Ionicons } from "@expo/vector-icons";
 
 import { getWeatherData } from "../api/weather";
 
-const Weather = () => {
+const Weather = ({ setSeason }) => {
   const [city, setCity] = useState("Toronto");
   const [weatherData, setWeatherData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [seasonProduct, setSeasonProduct] = useState(null);
 
   useEffect(() => {
     fetchData(city);
   }, []);
+
+  useEffect(() => {
+    if (weatherData) {
+      const temperature = weatherData.current.temp_c;
+      let seasonValue = "";
+      if (temperature > 30) {
+        seasonValue = "Summer";
+      } else if (temperature > 20) {
+        seasonValue = "Spring";
+      } else if (temperature > 10) {
+        seasonValue = "Autumn";
+      } else {
+        seasonValue = "Winter";
+      }
+
+      setSeason(seasonValue);
+      setSeasonProduct(seasonValue);
+    }
+  }, [weatherData]);
 
   const fetchData = async (city) => {
     try {
@@ -36,6 +56,9 @@ const Weather = () => {
   return (
     <View>
       <Text>Weather App</Text>
+      <Text>City: {city}</Text>
+      <Text>Current Season: {seasonProduct}</Text>
+
       <TextInput
         placeholder="Enter city"
         value={city}
