@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FlatList, Text, View, Button } from "react-native";
+import { FlatList, Text, View, Alert, Button } from "react-native";
 import { getProducts } from "../api/products";
 import { styles } from "../styles/styles";
 
@@ -8,26 +8,11 @@ const FilteredProducts = ({ season }) => {
   const [loading, setLoading] = useState(true);
   const metafieldsKeys = ["custom_text", "featured_product"];
 
-  const showAlertWithFilteredProducts = () => {
-    const filteredProductNames = products.map(item => item.title).join("\n");
-    alert("Productos Filtrados:\n" + filteredProductNames);
-  };
-
-  const showAlertWithUnfilteredProducts = () => {
-    const data = products;
-    const unfilteredProducts = data.filter(item => item.collection !== season);
-    const unfilteredProductNames = unfilteredProducts.map(item => item.title).join("\n");
-    alert("Productos no Filtrados:\n" + unfilteredProductNames);
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await getProducts(metafieldsKeys);
-        
-        const filteredProducts = data.filter(item => item.collection === season);
-        
-        setProducts(filteredProducts);
+        setProducts(data);
       } catch (error) {
         console.error("Error:", error);
       } finally {
@@ -36,23 +21,39 @@ const FilteredProducts = ({ season }) => {
     };
 
     fetchData();
-  }, [season]);
+  }, []);
 
   if (loading) {
     return <Text>Loading...</Text>;
   }
 
+  // Función para mostrar un alert con la data de los productos
+  const showProductData = (product) => {
+    Alert.alert("Detalles del Producto", JSON.stringify(product, null, 2));
+  };
+
+  // Función para filtrar productos que coincidan con la temporada en las etiquetas
+  const filterProductsBySeason = (products, season) => {
+    return products.filter((product) => {
+      // Reemplaza "tags" con el nombre real del campo que contiene las etiquetas en tus datos
+      const tags = product.tags || []; 
+      return tags.includes(season);
+    });
+  };
+
+  // Filtra los productos según la temporada
+  const filteredProducts = filterProductsBySeason(products, season);
+
   return (
     <View>
+      <Text>Product List</Text>
       <Text>Current Season: {season}</Text>
-      <Button title="Mostrar Productos Filtrados" onPress={showAlertWithFilteredProducts} />
-      <Button title="Mostrar Productos no Filtrados" onPress={showAlertWithUnfilteredProducts} />
       <FlatList
-        data={products}
-        keyExtractor={item => item.id}
+        data={filteredProducts}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.productItem}>
-            <Text>{item.title}</Text>
+            <Text onPress={() => showProductData(item)}>{item.title}</Text>
             <Text>Precio: ${item.variants[0].price}</Text>
             <Text style={styles.customText}>
               Custom Text: {item.customMetafields.custom_text}

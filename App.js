@@ -16,8 +16,8 @@ const App = () => {
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       <Weather setSeason={setSeasonValue} />
-      {/* <FilteredProducts season={season} /> */}
-      <ProductList season={season} />
+      <FilteredProducts season={season} />
+      {/* <ProductList season={season} /> */}
     </SafeAreaView>
   );
 };
