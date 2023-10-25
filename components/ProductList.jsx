@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Alert, FlatList, Text, View } from "react-native";
+import { Alert, FlatList, Text, View, TouchableOpacity } from "react-native";
 import { getProducts } from "../api/getProducts";
 import { styles } from "../styles/styles";
-import Search from "./Search"; // Asegúrate de importar el componente Search desde la ubicación correcta
 
-const ProductList = () => {
+const ProductList = ({ searchTerm, navigation }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filteredProducts, setFilteredProducts] = useState([]); // Nuevo estado
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const metafieldsKeys = ["custom_text", "featured_product"];
 
   useEffect(() => {
@@ -26,7 +25,11 @@ const ProductList = () => {
   }, []);
 
   const showProductData = (product) => {
-    Alert.alert("Detalles del Producto", JSON.stringify(product, null, 2));
+    Alert.alert("Product Detail", JSON.stringify(product, null, 2));
+  };
+
+  const navigateToDetailProduct = (product) => {
+    navigation.navigate("ProductScreen", { product });
   };
 
   const renderProductItem = ({ item }) => (
@@ -39,11 +42,14 @@ const ProductList = () => {
       <Text style={styles.featuredProduct}>
         Featured Product: {item.customMetafields.featured_product ? "Sí" : "No"}
       </Text>
+      <TouchableOpacity style={styles.button} onPress={() => navigateToDetailProduct(item)}>
+  <Text>Ir a Detalles del Producto</Text>
+</TouchableOpacity>
+
     </View>
   );
 
-  // Función para actualizar los productos filtrados
-  const handleSearchChange = (searchTerm) => {
+  useEffect(() => {
     if (searchTerm) {
       const filtered = products.filter((product) =>
         product.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -52,7 +58,7 @@ const ProductList = () => {
     } else {
       setFilteredProducts(products);
     }
-  };
+  }, [searchTerm, products]);
 
   if (loading) {
     return <Text>Loading...</Text>;
@@ -61,9 +67,8 @@ const ProductList = () => {
   return (
     <View>
       <Text>Product List</Text>
-      <Search onSearchChange={handleSearchChange} />
       <FlatList
-        data={filteredProducts.length > 0 ? filteredProducts : products} // Mostrar los productos filtrados
+        data={filteredProducts.length > 0 ? filteredProducts : products}
         keyExtractor={(item) => item.id}
         renderItem={renderProductItem}
       />

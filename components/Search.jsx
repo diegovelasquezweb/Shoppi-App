@@ -1,4 +1,3 @@
-// Search.js
 import React, { useState } from "react";
 import { TextInput, View } from "react-native";
 
@@ -7,7 +6,7 @@ const Search = ({ onSearchChange }) => {
 
   const handleSearchChange = (text) => {
     setSearchTerm(text);
-    onSearchChange(text); // Llamar a la función proporcionada desde ProductList
+    onSearchChange(text);
   };
 
   return (
