@@ -1,18 +1,27 @@
-import React, { useState } from "react";
-import { SafeAreaView, StatusBar, View } from "react-native";
-import ProductList from "../components/ProductList";
-import Search from "../components/Search";
+import React from "react";
+import { SafeAreaView, StatusBar, View, Button, Text } from "react-native";
 import { styles } from "../styles/styles";
 
 const MainScreen = ({ navigation }) => {
-  const [searchTerm, setSearchTerm] = useState(""); 
-
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       <View>
-        <Search onSearchChange={setSearchTerm} />
-        <ProductList searchTerm={searchTerm} navigation={navigation}/>
+        <Text style={styles.brand}>Welcome to Supportifly</Text>
+      </View>
+      <View>
+        <Button
+          title="Login"
+          onPress={() => navigation.navigate("LoginScreen")}
+        />
+        <Button
+          title="Register"
+          onPress={() => navigation.navigate("RegisterScreen")}
+        />
+        <Button
+          title="Create a Ticket"
+          onPress={() => navigation.navigate("ProductListScreen")}
+        />
       </View>
     </SafeAreaView>
   );
