@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Alert, FlatList, Text, View, TouchableOpacity } from "react-native";
+import { Alert, FlatList, Text, View, TouchableOpacity, Button } from "react-native";
 import { getProducts } from "../api/getProducts";
 import { styles } from "../styles/styles";
 
@@ -32,6 +32,11 @@ const ProductList = ({ searchTerm, navigation }) => {
     navigation.navigate("ProductScreen", { product });
   };
 
+
+  const navigateToTicketForm = (product) => {
+    navigation.navigate("CreateTicketScreen", { product });
+  };
+
   const renderProductItem = ({ item }) => (
     <View style={styles.productItem}>
       <Text onPress={() => showProductData(item)}>{item.title}</Text>
@@ -43,8 +48,9 @@ const ProductList = ({ searchTerm, navigation }) => {
         Featured Product: {item.customMetafields.featured_product ? "Sí" : "No"}
       </Text>
       <TouchableOpacity style={styles.button} onPress={() => navigateToDetailProduct(item)}>
-  <Text>Ir a Detalles del Producto</Text>
-</TouchableOpacity>
+        <Text>Ir a Detalles del Producto</Text>
+      </TouchableOpacity>
+      <Button title="Crear Ticket" onPress={() => navigateToTicketForm(item)} />
 
     </View>
   );

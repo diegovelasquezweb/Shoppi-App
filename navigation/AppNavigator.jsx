@@ -2,11 +2,13 @@ import React from "react";
 import { SafeAreaView, StatusBar, View } from "react-native";
 import MainScreen from "../screens/MainScreen";
 import LoginScreen from "../screens/LoginScreen";
-import RegisterScreen from "../screens/RegisterScreen"; // import RegisterScreen
+import RegisterScreen from "../screens/RegisterScreen";
 import ProductScreen from "../screens/ProductScreen";
+import CreateTicketScreen from "../screens/CreateTicketScreen";
 import ProductListScreen from "../screens/ProductListScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+
 
 const Stack = createStackNavigator();
 
@@ -64,6 +66,11 @@ const AppNavigator = () => {
             name="ProductListScreen"
             component={ProductListScreen}
             options={({ route }) => ({ title: 'Test' })}
+          />
+          <Stack.Screen
+            name="CreateTicketScreen"
+            component={CreateTicketScreen}
+            options={({ route }) => ({ title: 'Create Ticket' })}
           />
         </Stack.Navigator>
       </NavigationContainer>
