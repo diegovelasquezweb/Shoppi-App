@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, Image } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, Image, ToastAndroid  } from 'react-native';
 
 import { getFirestore, addDoc, collection } from 'firebase/firestore';
 import { firestore } from '../firebaseConfig';
@@ -18,7 +18,7 @@ const TicketForm = ({ route }) => {
   const handleCreateTicket = async () => {
     try {
       const docRef = await addDoc(collection(firestore, 'tickets'), {
-        id: product.id,
+        productId: product.id,
         productName,
         description,
         photo,
@@ -28,6 +28,7 @@ const TicketForm = ({ route }) => {
         purchaseDate,
       });
       console.log('Ticket created with ID: ', docRef.id);
+      ToastAndroid.show('Ticket added', ToastAndroid.SHORT);
     } catch (e) {
       console.error('Error adding document: ', e);
     }
@@ -53,7 +54,12 @@ const TicketForm = ({ route }) => {
         numberOfLines={5}
       />
       <TakePhoto onPhotoTaken={(image) => setPhoto(image)} />
-
+      <TextInput
+        style={styles.input}
+        onChangeText={setPurchaseDate}
+        value={purchaseDate}
+        placeholder="Purchase Date"
+      />
       {/* <TextInput
         style={styles.input}
         onChangeText={setAudio}
@@ -72,12 +78,7 @@ const TicketForm = ({ route }) => {
         value={location}
         placeholder="Location"
       />
-      <TextInput
-        style={styles.input}
-        onChangeText={setPurchaseDate}
-        value={purchaseDate}
-        placeholder="Purchase Date"
-      /> */}
+      */}
       <View style={styles.buttonContainer}>
         <Button title="Submit" onPress={handleCreateTicket} />
       </View>
