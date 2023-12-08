@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, Image, ToastAndroid  } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, Image, ToastAndroid, Platform, TouchableOpacity  } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 import { getFirestore, addDoc, collection } from 'firebase/firestore';
 import { firestore } from '../firebaseConfig';
@@ -14,6 +15,8 @@ const TicketForm = ({ route }) => {
   const [video, setVideo] = useState('');
   const [location, setLocation] = useState('');
   const [purchaseDate, setPurchaseDate] = useState('');
+
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
   const handleCreateTicket = async () => {
     try {
@@ -35,6 +38,16 @@ const TicketForm = ({ route }) => {
   };
 
 
+  const handleDateChange = (event, selectedDate) => {
+    const currentDate = selectedDate || purchaseDate;
+    setDatePickerVisibility(Platform.OS === 'ios');
+    setPurchaseDate(currentDate);
+  };
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
   return (
     <View>
       <Text style={styles.text}>Create Ticket</Text>
@@ -54,12 +67,22 @@ const TicketForm = ({ route }) => {
         numberOfLines={5}
       />
       <TakePhoto onPhotoTaken={(image) => setPhoto(image)} />
-      <TextInput
-        style={styles.input}
-        onChangeText={setPurchaseDate}
-        value={purchaseDate}
-        placeholder="Purchase Date"
-      />
+      <TouchableOpacity onPress={showDatePicker}>
+        <TextInput
+          style={styles.input}
+          value={purchaseDate ? purchaseDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : ''}
+          placeholder="Date"
+          editable={false}
+        />
+      </TouchableOpacity>
+      {isDatePickerVisible && (
+        <DateTimePicker
+          value={purchaseDate ? purchaseDate : new Date()}
+          mode="date"
+          display="default"
+          onChange={handleDateChange}
+        />
+      )}
       {/* <TextInput
         style={styles.input}
         onChangeText={setAudio}
