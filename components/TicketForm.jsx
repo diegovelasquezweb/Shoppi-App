@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, Image, ToastAndroid, Platform, TouchableOpacity  } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TextInput, Button, Image, ToastAndroid, Platform, TouchableOpacity } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import * as Location from 'expo-location';
 
 import { getFirestore, addDoc, collection } from 'firebase/firestore';
 import { firestore } from '../firebaseConfig';
@@ -17,6 +18,23 @@ const TicketForm = ({ route }) => {
   const [purchaseDate, setPurchaseDate] = useState('');
 
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        ToastAndroid.show('Permission to access location was denied', ToastAndroid.SHORT);
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      let reverseGeocode = await Location.reverseGeocodeAsync(location.coords);
+      if (reverseGeocode && reverseGeocode.length > 0) {
+        setLocation(reverseGeocode[0].city + ', ' + reverseGeocode[0].country);
+      }
+    })();
+  }, []);
 
   const handleCreateTicket = async () => {
     try {
@@ -83,25 +101,12 @@ const TicketForm = ({ route }) => {
           onChange={handleDateChange}
         />
       )}
-      {/* <TextInput
-        style={styles.input}
-        onChangeText={setAudio}
-        value={audio}
-        placeholder="Audio"
-      />
       <TextInput
         style={styles.input}
-        onChangeText={setVideo}
-        value={video}
-        placeholder="Video"
-      />
-      <TextInput
-        style={styles.input}
-        onChangeText={setLocation}
         value={location}
         placeholder="Location"
+        editable={false}
       />
-      */}
       <View style={styles.buttonContainer}>
         <Button title="Submit" onPress={handleCreateTicket} />
       </View>
