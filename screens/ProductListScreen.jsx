@@ -17,25 +17,28 @@ const MainScreen = ({ navigation }) => {
 
   useEffect(() => {
     const firestore = getFirestore();
-    const userId = auth.currentUser.uid;
-    const userRef = doc(firestore, "users", userId);
+    
+    if (auth.currentUser) {
+      const userId = auth.currentUser.uid;
+      const userRef = doc(firestore, "users", userId);
 
-    getDoc(userRef)
-      .then((docSnap) => {
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          setUserData({
-            firstName: data.firstName,
-            lastName: data.lastName,
-            email: data.email,
-          });
-        } else {
-          console.log("User data not found.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error getting user data:", error);
-      });
+      getDoc(userRef)
+        .then((docSnap) => {
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            setUserData({
+              firstName: data.firstName,
+              lastName: data.lastName,
+              email: data.email,
+            });
+          } else {
+            console.log("User data not found.");
+          }
+        })
+        .catch((error) => {
+          console.error("Error getting user data:", error);
+        });
+    }
   }, []);
 
   return (

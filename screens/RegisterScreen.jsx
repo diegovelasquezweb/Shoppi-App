@@ -44,16 +44,17 @@ function RegisterScreen({ navigation }) {
     }
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const uid = userCredential.user.uid;
 
       const newUser = {
         firstName,
         lastName,
         email,
-        uid: auth.currentUser.uid,
+        uid,
       };
 
-      setDoc(doc(firestore, "users", auth.currentUser.uid), newUser).then(() => {
+      setDoc(doc(firestore, "users", uid), newUser).then(() => {
         Alert.alert("Success", "User registered!");
       });
 

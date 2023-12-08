@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, Image } from 'react-native';
+
 import { getFirestore, addDoc, collection } from 'firebase/firestore';
 import { firestore } from '../firebaseConfig';
+import TakePhoto from './TakePhoto';
 
 const TicketForm = ({ route }) => {
   const { product } = route.params;
@@ -12,11 +14,11 @@ const TicketForm = ({ route }) => {
   const [video, setVideo] = useState('');
   const [location, setLocation] = useState('');
   const [purchaseDate, setPurchaseDate] = useState('');
-  const [file, setFile] = useState('');
 
   const handleCreateTicket = async () => {
     try {
       const docRef = await addDoc(collection(firestore, 'tickets'), {
+        id: product.id,
         productName,
         description,
         photo,
@@ -24,7 +26,6 @@ const TicketForm = ({ route }) => {
         video,
         location,
         purchaseDate,
-        file,
       });
       console.log('Ticket created with ID: ', docRef.id);
     } catch (e) {
@@ -32,20 +33,6 @@ const TicketForm = ({ route }) => {
     }
   };
 
-  const pickDocument = async () => {
-    try {
-      const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.allFiles],
-      });
-      setFile(res);
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        // User cancelled the picker
-      } else {
-        throw err;
-      }
-    }
-  };
 
   return (
     <View>
@@ -58,18 +45,16 @@ const TicketForm = ({ route }) => {
         editable={false}
       />
       <TextInput
-        style={styles.input}
+        style={[styles.input, { height: Platform.OS === 'ios' ? 20 * 5 : null }]}
         onChangeText={setDescription}
         value={description}
         placeholder="Description"
+        multiline
+        numberOfLines={5}
       />
-      <TextInput
-        style={styles.input}
-        onChangeText={setPhoto}
-        value={photo}
-        placeholder="Photo"
-      />
-      <TextInput
+      <TakePhoto onPhotoTaken={(image) => setPhoto(image)} />
+
+      {/* <TextInput
         style={styles.input}
         onChangeText={setAudio}
         value={audio}
@@ -92,7 +77,7 @@ const TicketForm = ({ route }) => {
         onChangeText={setPurchaseDate}
         value={purchaseDate}
         placeholder="Purchase Date"
-      />
+      /> */}
       <View style={styles.buttonContainer}>
         <Button title="Submit" onPress={handleCreateTicket} />
       </View>
