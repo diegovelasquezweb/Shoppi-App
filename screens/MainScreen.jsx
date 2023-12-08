@@ -18,9 +18,6 @@ const MainScreen = ({ navigation }) => {
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("ProductListScreen")}>
-        <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
     </SafeAreaView>
   );
 };

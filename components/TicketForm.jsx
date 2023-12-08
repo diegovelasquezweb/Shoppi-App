@@ -3,18 +3,18 @@ import { View, Text, StyleSheet, TextInput, Button, Image, ToastAndroid, Platfor
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as Location from 'expo-location';
 import MapView, { Marker } from 'react-native-maps';
+import { useNavigation } from '@react-navigation/native';
 
 import { getFirestore, addDoc, collection, updateDoc } from 'firebase/firestore';
 import { firestore } from '../firebaseConfig';
 import TakePhoto from './TakePhoto';
+import { styles } from '../styles/styles';
 
-const TicketForm = ({ route, navigation }) => {
+const TicketForm = ({ route }) => {
   const { product } = route.params;
   const [productName, setProductName] = useState(product.title);
   const [description, setDescription] = useState('');
   const [photo, setPhoto] = useState('');
-  const [audio, setAudio] = useState('');
-  const [video, setVideo] = useState('');
   const [location, setLocation] = useState('');
   const [purchaseDate, setPurchaseDate] = useState('');
 
@@ -22,6 +22,7 @@ const TicketForm = ({ route, navigation }) => {
 
   const [isMapVisible, setMapVisibility] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState(null);
+  const navigation = useNavigation();
 
   const handleLocationSelect = (event) => {
     setSelectedLocation({
@@ -59,8 +60,6 @@ const TicketForm = ({ route, navigation }) => {
         productName,
         description,
         photo,
-        audio,
-        video,
         location,
         purchaseDate,
       });
@@ -69,7 +68,6 @@ const TicketForm = ({ route, navigation }) => {
       });
       console.log('Ticket created with ID: ', docRef.id);
       ToastAndroid.show('Ticket added', ToastAndroid.SHORT);
-      navigation.replace("TicketsListScreen");
     } catch (e) {
       console.error('Error adding document: ', e);
     }
@@ -97,8 +95,9 @@ const TicketForm = ({ route, navigation }) => {
   };
 
   return (
-    <View>
-      <Text style={styles.text}>Create Ticket</Text>
+    <View style="">
+      <Text style={styles.title}>Create Ticket</Text>
+      <Text style={styles.label}>Product Name</Text>
       <TextInput
         style={styles.input}
         onChangeText={setProductName}
@@ -106,21 +105,27 @@ const TicketForm = ({ route, navigation }) => {
         placeholder="Product Name"
         editable={false}
       />
+
+      <Text style={styles.label}>Description</Text>
       <TextInput
-        style={[styles.input, { height: Platform.OS === 'ios' ? 20 * 5 : null }]}
+        style={[styles.inputArea, { height: Platform.OS === 'ios' ? 20 * 5 : null }]}
         onChangeText={setDescription}
         value={description}
         placeholder="Description"
         multiline
         numberOfLines={5}
       />
+      <TakePhoto onPhotoTaken={(image) => setPhoto(image)} />
+      <Text style={styles.label}>Location</Text>
       <TextInput
         style={styles.input}
         value={location}
         placeholder="Location"
         editable={false}
       />
-      <Button title="Change Location" onPress={handleChangeLocation} />
+      <TouchableOpacity style={styles.buttonSecondary} onPress={handleChangeLocation}>
+        <Text style={styles.buttonText}>Change Location</Text>
+      </TouchableOpacity>
       {isMapVisible && (
         <View>
           <MapView
@@ -142,17 +147,14 @@ const TicketForm = ({ route, navigation }) => {
               />
             )}
           </MapView>
-          <Button title="Set New Location" onPress={handleSetNewLocation} />
+          <TouchableOpacity style={styles.buttonSecondary} onPress={handleSetNewLocation}>
+            <Text style={styles.buttonText}>Set New Location</Text>
+          </TouchableOpacity>
         </View>
       )}
-      <TakePhoto onPhotoTaken={(image) => setPhoto(image)} />
-      <TouchableOpacity onPress={showDatePicker}>
-        <TextInput
-          style={styles.input}
-          value={purchaseDate ? purchaseDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : ''}
-          placeholder="Date"
-          editable={false}
-        />
+
+      <TouchableOpacity style={styles.buttonSecondary} onPress={showDatePicker}>
+        <Text style={styles.buttonText}>Choose Date</Text>
       </TouchableOpacity>
       {isDatePickerVisible && (
         <DateTimePicker
@@ -163,33 +165,15 @@ const TicketForm = ({ route, navigation }) => {
         />
       )}
 
-      <View style={styles.buttonContainer}>
-        <Button title="Submit" onPress={handleCreateTicket} />
-      </View>
+      <TouchableOpacity style={styles.buttonFull} onPress={handleCreateTicket}>
+        <Text style={styles.buttonText}>Create Ticket</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.buttonFull} onPress={() => navigation.navigate('TicketsListScreen')}>
+        <Text style={styles.buttonText}>All Tickets</Text>
+      </TouchableOpacity>
+
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 16,
-  },
-  text: {
-    fontSize: 20,
-    textAlign: 'center',
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginTop: 10,
-    paddingHorizontal: 10,
-  },
-  buttonContainer: {
-    marginTop: 10,
-  },
-});
 
 export default TicketForm;

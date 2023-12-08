@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, View, Text, StyleSheet, Image } from 'react-native';
+import { FlatList, View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
 import { getFirestore, query, collection, getDocs } from 'firebase/firestore';
 import { firestore } from '../firebaseConfig';
+import { useNavigation } from '@react-navigation/native';
+import { styles } from '../styles/styles';
 
 const TicketItem = ({ item }) => (
   <View style={styles.item}>
     <Text>{item.productName}</Text>
     <Text>{item.description}</Text>
     <Text>{item.location}</Text>
-    <Image source={{ uri: item.photo }} style={styles.image} />
+    <Image source={{ uri: item.photo }} style={styles.imageTicket} />
   </View>
 );
 const TicketsList = () => {
   const [tickets, setTickets] = useState([]);
+  const navigation = useNavigation();
 
   useEffect(() => {
     const fetchTickets = async () => {
@@ -29,7 +32,10 @@ const TicketsList = () => {
 
   return (
     <View>
-      <Text>Tickets List</Text>
+      <Text style={styles.title}>Tickets List</Text>
+      <TouchableOpacity style={styles.buttonFull} onPress={() => navigation.navigate('ProductListScreen')}>
+        <Text style={styles.buttonText}>Go to Product List</Text>
+      </TouchableOpacity>
       <FlatList
         data={tickets}
         keyExtractor={(item, index) => index.toString()}
@@ -39,16 +45,5 @@ const TicketsList = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  item: {
-    padding: 10,
-    marginVertical: 8,
-    marginHorizontal: 16,
-  },
-  image: {
-    width: 100,
-    height: 100,
-  },
-});
 
 export default TicketsList;

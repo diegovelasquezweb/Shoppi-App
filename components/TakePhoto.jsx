@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Button, Image, View } from "react-native";
+import { Button, Image, View, TouchableOpacity, Text } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import { styles } from "../styles/styles";
 
 export default function TakePhoto({ onPhotoTaken }) {
   const [image, setImage] = useState(null);
@@ -26,7 +27,9 @@ export default function TakePhoto({ onPhotoTaken }) {
   return (
     <View>
       {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-      <Button title="Take Photo" onPress={takePhoto} />
+      <TouchableOpacity style={styles.buttonSecondary} onPress={takePhoto} >
+      <Text style={styles.buttonText}>Take Photo</Text>
+    </TouchableOpacity>
     </View>
   );
 }

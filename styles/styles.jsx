@@ -62,12 +62,30 @@ export const styles = StyleSheet.create({
     width: 150,
     textAlign: 'center',
   },
+  buttonFull: {
+    backgroundColor: colors.orange,
+    padding: 10,
+    borderRadius: 5,
+    width: '100%',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  buttonSecondary: {
+    backgroundColor: colors.blue,
+    padding: 10,
+    borderRadius: 5,
+    width: 200,
+    textAlign: 'center',
+    marginBottom: 10,
+    marginTop: 10,
+  },
   buttonText: {
     color: colors.white,
     textAlign: 'center',
     fontFamily: 'Roboto',
     textTransform: 'uppercase',
-    fontSize: 18,
+    fontSize: 14,
+    fontWeight: 'bold',
   },
   // Styles for LoginScreen
   scrollContainer: {
@@ -98,7 +116,17 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 10,
     borderRadius: 5,
-    marginBottom: 15,
+    marginBottom: 10,
+    color: colors.blue,
+    fontSize: 16,
+  },
+  inputArea: {
+    borderWidth: 1,
+    borderColor: colors.orange,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 5,
+    marginBottom: 10,
   },
   productItem: {
     flexDirection: 'row',
@@ -123,5 +151,32 @@ export const styles = StyleSheet.create({
   productPrice: {
     fontSize: 16,
     paddingVertical: 5,
+  },
+  
+  productImageDetail: {
+    width: 300,
+    height: 200,
+    marginBottom: 10,
+  },
+  item: {
+    backgroundColor: '#fff',
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  imageTicket: {
+    width: '100%',
+    height: 200,
+    borderRadius: 10,
+    marginTop: 10,
   },
 });

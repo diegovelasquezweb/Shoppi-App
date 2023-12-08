@@ -35,7 +35,7 @@ const ProductList = ({ searchTerm, navigation }) => {
 
 
   const navigateToTicketForm = (product) => {
-    navigation.navigate("CreateTicketScreen", { product, navigation });
+    navigation.navigate("CreateTicketScreen", { product });
   };
 
   const renderProductItem = ({ item }) => (
