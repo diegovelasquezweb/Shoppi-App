@@ -4,11 +4,11 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import * as Location from 'expo-location';
 import MapView, { Marker } from 'react-native-maps';
 
-import { getFirestore, addDoc, collection } from 'firebase/firestore';
+import { getFirestore, addDoc, collection, updateDoc } from 'firebase/firestore';
 import { firestore } from '../firebaseConfig';
 import TakePhoto from './TakePhoto';
 
-const TicketForm = ({ route }) => {
+const TicketForm = ({ route, navigation }) => {
   const { product } = route.params;
   const [productName, setProductName] = useState(product.title);
   const [description, setDescription] = useState('');
@@ -64,8 +64,12 @@ const TicketForm = ({ route }) => {
         location,
         purchaseDate,
       });
+      await updateDoc(docRef, {
+        id: docRef.id,
+      });
       console.log('Ticket created with ID: ', docRef.id);
       ToastAndroid.show('Ticket added', ToastAndroid.SHORT);
+      navigation.navigate("TicketsListScreen");
     } catch (e) {
       console.error('Error adding document: ', e);
     }

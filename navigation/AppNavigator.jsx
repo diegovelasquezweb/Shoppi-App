@@ -6,6 +6,7 @@ import RegisterScreen from "../screens/RegisterScreen";
 import ProductScreen from "../screens/ProductScreen";
 import CreateTicketScreen from "../screens/CreateTicketScreen";
 import ProductListScreen from "../screens/ProductListScreen";
+import TicketsListScreen from "../screens/TicketsListScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
@@ -17,7 +18,7 @@ const AppNavigator = () => {
     <SafeAreaView style={{ flex: 1 }}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Main Screen">
+        <Stack.Navigator initialRouteName="TicketsListScreen">
           <Stack.Screen
             name="mainScreen"
             component={MainScreen}
@@ -71,6 +72,11 @@ const AppNavigator = () => {
             name="CreateTicketScreen"
             component={CreateTicketScreen}
             options={({ route }) => ({ title: 'Create Ticket' })}
+          />
+          <Stack.Screen
+            name="TicketsListScreen"
+            component={TicketsListScreen}
+            options={({ route }) => ({ title: 'Tickets' })}
           />
         </Stack.Navigator>
       </NavigationContainer>
