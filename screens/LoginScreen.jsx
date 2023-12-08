@@ -7,6 +7,7 @@ import {
   Alert,
   ScrollView,
   KeyboardAvoidingView,
+  TouchableOpacity,
 } from "react-native";
 import { auth } from "../firebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -50,8 +51,7 @@ function LoginScreen({ navigation }) {
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Text style={styles.title}>Diego Velasquez - Lab 5</Text>
-        <Text style={styles.subtitle}>Login</Text>
+        <Text style={styles.title}>Login</Text>
         <Text style={styles.label}>Email:</Text>
         <TextInput
           style={styles.input}
@@ -74,12 +74,13 @@ function LoginScreen({ navigation }) {
           autoCapitalize="none"
           keyboardType="default"
         />
-        <View style={styles.buttonContainer}>
-          <Button
-            title="Register"
-            onPress={() => navigation.navigate("Register")}
-          />
-          <Button title="Login" onPress={handleLogin} />
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("RegisterScreen")}>
+            <Text style={styles.buttonText}>Register</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={handleLogin}>
+            <Text style={styles.buttonText}>Login</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

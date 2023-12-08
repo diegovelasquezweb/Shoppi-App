@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Alert, FlatList, Text, View, TouchableOpacity, Button } from "react-native";
+import { Alert, FlatList, Text, View, TouchableOpacity, Button, Image } from "react-native";
 import { getProducts } from "../api/getProducts";
 import { styles } from "../styles/styles";
 
@@ -10,6 +10,7 @@ const ProductList = ({ searchTerm, navigation }) => {
   const metafieldsKeys = ["custom_text", "featured_product"];
 
   useEffect(() => {
+
     const fetchData = async () => {
       try {
         const data = await getProducts(metafieldsKeys);
@@ -39,19 +40,14 @@ const ProductList = ({ searchTerm, navigation }) => {
 
   const renderProductItem = ({ item }) => (
     <View style={styles.productItem}>
-      <Text onPress={() => showProductData(item)}>{item.title}</Text>
-      <Text>Precio: ${item.variants[0].price}</Text>
-      <Text style={styles.customText}>
-        Custom Text: {item.customMetafields.custom_text}
-      </Text>
-      <Text style={styles.featuredProduct}>
-        Featured Product: {item.customMetafields.featured_product ? "Sí" : "No"}
-      </Text>
-      <TouchableOpacity style={styles.button} onPress={() => navigateToDetailProduct(item)}>
-        <Text>Ir a Detalles del Producto</Text>
-      </TouchableOpacity>
-      <Button title="Crear Ticket" onPress={() => navigateToTicketForm(item)} />
-
+      <Image source={{ uri: item.images[0].src}} style={styles.productImage} />
+      <View style={styles.productDetails}>
+        <Text style={styles.productTitle} onPress={() => navigateToDetailProduct(item)}>{item.title}</Text>
+        <Text style={styles.productPrice}>${item.variants[0].price}</Text>
+        <TouchableOpacity style={styles.button}  onPress={() => navigateToTicketForm(item)}>
+          <Text style={styles.buttonText}>Create Ticket</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 
@@ -72,7 +68,6 @@ const ProductList = ({ searchTerm, navigation }) => {
 
   return (
     <View>
-      <Text>Product List</Text>
       <FlatList
         data={filteredProducts.length > 0 ? filteredProducts : products}
         keyExtractor={(item) => item.id}

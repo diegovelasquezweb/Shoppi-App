@@ -18,7 +18,7 @@ const AppNavigator = () => {
     <SafeAreaView style={{ flex: 1 }}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="TicketsListScreen">
+        <Stack.Navigator initialRouteName="Main Screen">
           <Stack.Screen
             name="mainScreen"
             component={MainScreen}
@@ -66,7 +66,7 @@ const AppNavigator = () => {
           <Stack.Screen
             name="ProductListScreen"
             component={ProductListScreen}
-            options={({ route }) => ({ title: 'Test' })}
+            options={({ route }) => ({ title: 'Products List' })}
           />
           <Stack.Screen
             name="CreateTicketScreen"

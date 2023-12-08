@@ -7,6 +7,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Alert,
+  TouchableOpacity,
 } from "react-native";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, firestore } from "../firebaseConfig";
@@ -66,7 +67,7 @@ function RegisterScreen({ navigation }) {
   };
 
   const handleCancel = () => {
-    navigation.navigate("Login");
+    navigation.navigate("LoginScreen");
   };
 
   return (
@@ -108,9 +109,13 @@ function RegisterScreen({ navigation }) {
           autoCapitalize="none"
           keyboardType="default"
         />
-        <View style={styles.buttonContainer}>
-          <Button title="Cancel" onPress={handleCancel} />
-          <Button title="Register" onPress={handleRegister} />
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity style={styles.button} onPress={handleCancel}>
+            <Text style={styles.buttonText}>Cancel</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={handleRegister}>
+            <Text style={styles.buttonText}>Register</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

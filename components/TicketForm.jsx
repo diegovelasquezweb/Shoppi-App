@@ -69,7 +69,7 @@ const TicketForm = ({ route, navigation }) => {
       });
       console.log('Ticket created with ID: ', docRef.id);
       ToastAndroid.show('Ticket added', ToastAndroid.SHORT);
-      navigation.navigate("TicketsListScreen");
+      navigation.replace("TicketsListScreen");
     } catch (e) {
       console.error('Error adding document: ', e);
     }

@@ -1,28 +1,26 @@
 import React from "react";
-import { SafeAreaView, StatusBar, View, Button, Text } from "react-native";
+import { SafeAreaView, StatusBar, View, Text, TouchableOpacity } from "react-native";
 import { styles } from "../styles/styles";
 
 const MainScreen = ({ navigation }) => {
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.containerLanding}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
-      <View>
-        <Text style={styles.brand}>Welcome to Supportifly</Text>
+      <View style={styles.brand}>
+        <Text style={styles.logo}>Welcome to Supportifly</Text>
+        <Text style={styles.header}>Please login or register to continue</Text>
       </View>
-      <View>
-        <Button
-          title="Login"
-          onPress={() => navigation.navigate("LoginScreen")}
-        />
-        <Button
-          title="Register"
-          onPress={() => navigation.navigate("RegisterScreen")}
-        />
-        <Button
-          title="Create a Ticket"
-          onPress={() => navigation.navigate("ProductListScreen")}
-        />
+      <View style={styles.buttonsContainer}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("RegisterScreen")}>
+          <Text style={styles.buttonText}>Register</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("LoginScreen")}>
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
       </View>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("ProductListScreen")}>
+        <Text style={styles.buttonText}>Login</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
